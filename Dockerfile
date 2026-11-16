@@ -1,0 +1,12 @@
+# biblioteca-web: dos etapas. Node (node:24-slim) compila el Angular; nginx sirve lo compilado.
+FROM node:24-slim AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npx ng build
+
+FROM nginx:1.29-alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/biblioteca-web/browser /usr/share/nginx/html
+EXPOSE 80
