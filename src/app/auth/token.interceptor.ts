@@ -1,12 +1,12 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { from, switchMap } from 'rxjs';
+import { GATEWAY } from '../biblioteca';
 
-// Lista blanca: a quien se le manda el token. Nada mas.
-const PERMITIDOS = ['http://localhost:8080'];   // solo tu gateway
-
+// Lista blanca: el token solo va al gateway. En Azure GATEWAY es '' (mismo origen), asi que se
+// compara contra '/v1/': nada de otro dominio recibe el token.
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
-  if (!PERMITIDOS.some((base) => req.url.startsWith(base))) {
+  if (!req.url.startsWith(`${GATEWAY}/v1/`)) {
     return next(req);
   }
 

@@ -13,14 +13,18 @@ import { Amplify } from 'aws-amplify';
 Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolId:       'us-east-1_XXXXXXXXX',
-      userPoolClientId: 'XXXXXXXXXXXXXXXXXXXXXXXXXX',
+      userPoolId:       'us-east-1_2ainfnzar',
+      userPoolClientId: 'ifg6i2bilchroql1l1ps6r346',
       loginWith: {
         oauth: {
-          domain:          'biblioteca-XXX-0000.auth.us-east-1.amazoncognito.com',
+          domain:          'us-east-12ainfnzar.auth.us-east-1.amazoncognito.com',
           scopes:          ['openid', 'profile', 'biblioteca/libros.leer'],
-          redirectSignIn:  ['http://localhost:4200/callback'],
-          redirectSignOut: ['http://localhost:4200'],
+          // E3: dos URL en cada lista. Amplify usa la que coincide con el origen de la pagina:
+          // localhost con ng serve, y la de Azure cuando lo sirve Caddy en gw-azure.
+          redirectSignIn:  ['http://localhost:4200/callback',
+                            'https://biblioteca-fergchis-l10.northcentralus.cloudapp.azure.com/callback'],
+          redirectSignOut: ['http://localhost:4200/',
+                            'https://biblioteca-fergchis-l10.northcentralus.cloudapp.azure.com/'],
           responseType:    'code',
         },
       },
